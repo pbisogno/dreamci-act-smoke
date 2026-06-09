@@ -1,12 +1,18 @@
 name: CI
 on: [push]
 jobs:
-  hello:
+  cache-smoke:
     runs-on: ubuntu-latest
     steps:
-      - name: Greet
-        run: echo "DreamCI act pipeline works! trigger=$AURACI_TRIGGER"
-      - name: Host info
-        run: uname -a
-      - name: Done
-        run: echo "step 3 ok"
+      - name: Probe cache (Library restored by DreamCI before the run?)
+        run: |
+          if [ -f Library/marker.txt ]; then
+            echo "CACHE_WARM marker=$(cat Library/marker.txt)"
+          else
+            echo "CACHE_COLD (no Library/marker.txt)"
+          fi
+      - name: Write Library marker (DreamCI saves Library/ to R2 on success)
+        run: |
+          mkdir -p Library
+          echo "built-$(date -u +%s)" > Library/marker.txt
+          echo "wrote Library/marker.txt -> $(cat Library/marker.txt)"
