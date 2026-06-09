@@ -1,0 +1,12 @@
+name: CI
+on: [push]
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Greet
+        run: echo "DreamCI act pipeline works! trigger=$AURACI_TRIGGER"
+      - name: Host info
+        run: uname -a
+      - name: Done
+        run: echo "step 3 ok"
